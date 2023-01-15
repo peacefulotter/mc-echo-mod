@@ -25,30 +25,41 @@ public class EchoMenuScreen extends Screen
         super( title );
         this.parent = parent;
         this.client = client;
-        this.anchorY = 50;
-    }
-
-    private void addBtn( String name, Config config )
-    {
-        addBtn( name, btn -> config.toggle() );
+        this.anchorY = 10;
     }
 
     private void addBtn( String name, ButtonWidget.PressAction onPress )
     {
-        this.addDrawableChild(
+        addBtn(
                 ButtonWidget.builder( Text.of( name ), onPress )
+                .size( BUTTON_WIDTH, BUTTON_HEIGHT )
+                .position( 10, anchorY )
+                .build()
+        );
+    }
+
+    private void addBtn( Config config )
+    {
+        addBtn(
+                new ConfigButton.Builder( Text.of( config.getName() ), (w) -> config.toggle() )
                         .size( BUTTON_WIDTH, BUTTON_HEIGHT )
                         .position( 10, anchorY )
+                        .config( config )
                         .build()
         );
+    }
+
+    private void addBtn( ButtonWidget btn )
+    {
+        this.addDrawableChild( btn );
         anchorY += BUTTON_HEIGHT + 5;
     }
 
     @Override
     protected void init()
     {
-        addBtn( "AutoFish", AUTO_FISH_ACTIVE );
-        addBtn( "AutoLibrarian", AUTO_LIBRARIAN_ACTIVE );
+        addBtn( AUTO_FISH_ACTIVE );
+        addBtn( AUTO_LIBRARIAN_ACTIVE );
         addBtn( "Return", btn -> close() );
     }
 
