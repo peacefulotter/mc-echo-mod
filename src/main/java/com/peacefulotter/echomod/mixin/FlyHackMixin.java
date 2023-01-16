@@ -54,14 +54,19 @@ public abstract class FlyHackMixin extends Entity
     @Inject(at=@At( "RETURN" ), method="tick")
     private void onTick( CallbackInfo ci )
     {
-        if ( mounted && tick >= MAX_FLY_TICKS )
+        if ( !mounted ) return;
+
+        Vec3d vel = mount.getVelocity();
+        if ( tick >= MAX_FLY_TICKS )
         {
-            Vec3d vel = mount.getVelocity();
             mount.setVelocity( vel.getX(), -FLY_UP, vel.getZ() );
             tick = 0;
         }
         else
+        {
+            mount.setVelocity( vel.getX(), 0, vel.getZ() );
             tick++;
+        }
     }
 
     @Inject(at=@At( "RETURN" ), method="tickMovement")

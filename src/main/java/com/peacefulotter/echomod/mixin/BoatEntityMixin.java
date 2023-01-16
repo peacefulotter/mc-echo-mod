@@ -15,11 +15,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-import static com.peacefulotter.echomod.EchoModClient.CLIENT_LOGGER;
 
 @Mixin( BoatEntity.class )
 public abstract class BoatEntityMixin extends Entity
 {
+    private static final float YAW_VELOCITY = 4;
+
     @Shadow private float velocityDecay;
     @Shadow private float yawVelocity;
 
@@ -47,8 +48,8 @@ public abstract class BoatEntityMixin extends Entity
     private void updatePaddles( CallbackInfo ci )
     {
         this.yawVelocity = 0f;
-        if ( this.pressingLeft ) this.yawVelocity--;
-        if ( this.pressingRight ) this.yawVelocity++;
+        if ( this.pressingLeft ) this.yawVelocity -= YAW_VELOCITY;
+        if ( this.pressingRight ) this.yawVelocity += YAW_VELOCITY;
     }
 
     /**
