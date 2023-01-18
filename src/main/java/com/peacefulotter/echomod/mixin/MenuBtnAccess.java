@@ -14,6 +14,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin( GameMenuScreen.class )
 public class MenuBtnAccess extends Screen
 {
+    private static final Text TITLE = Text.literal("menu@echo-mod");
+
     protected MenuBtnAccess( Text title )
     {
         super( title );
@@ -22,7 +24,7 @@ public class MenuBtnAccess extends Screen
     @Inject(at = @At("HEAD"), method = "initWidgets")
     private void addMenu( CallbackInfo ci )
     {
-        ButtonWidget button = new ButtonWidget.Builder( Text.literal("echo-mod"), btn -> {
+        ButtonWidget button = new ButtonWidget.Builder( TITLE, btn -> {
             if ( this.client == null ) return;
             this.client.setScreen(new EchoMenuScreen(this, this.client));
         } )

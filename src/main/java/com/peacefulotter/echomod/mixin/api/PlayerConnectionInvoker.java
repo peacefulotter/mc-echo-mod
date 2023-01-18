@@ -1,4 +1,4 @@
-package com.peacefulotter.echomod.mixin;
+package com.peacefulotter.echomod.mixin.api;
 
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.Packet;
@@ -11,5 +11,5 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 public interface PlayerConnectionInvoker
 {
     @Invoker("sendImmediately")
-    public void sendImm( Packet<?> packet, @Nullable PacketCallbacks callbacks );
+    void sendImm( Packet<?> packet, @Nullable PacketCallbacks callbacks );
 }

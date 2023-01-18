@@ -14,9 +14,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-import static com.peacefulotter.echomod.config.BoatFlyHackConfig.YAW_VELOCITY;
-
-
 @Mixin( BoatEntity.class )
 public abstract class BoatEntityMixin extends Entity
 {
@@ -47,19 +44,15 @@ public abstract class BoatEntityMixin extends Entity
     private void updatePaddles( CallbackInfo ci )
     {
         this.yawVelocity = 0f;
-        if ( this.pressingLeft ) this.yawVelocity -= YAW_VELOCITY;
-        if ( this.pressingRight ) this.yawVelocity += YAW_VELOCITY;
+//        if ( this.pressingLeft ) this.yawVelocity -= YAW_VELOCITY;
+//        if ( this.pressingRight ) this.yawVelocity += YAW_VELOCITY;
     }
 
-    /**
-     * @author
-     * @reason
-     */
-    @Overwrite
-    public void fall( double heightDifference, boolean onGround, BlockState state, BlockPos landedPosition )
-    {
-        // CLIENT_LOGGER.info( heightDifference + " " + onGround + " " + state + " " + landedPosition );
-    }
+//    @Overwrite
+//    public void fall( double heightDifference, boolean onGround, BlockState state, BlockPos landedPosition )
+//    {
+//        // CLIENT_LOGGER.info( heightDifference + " " + onGround + " " + state + " " + landedPosition );
+//    }
 
 
 }
