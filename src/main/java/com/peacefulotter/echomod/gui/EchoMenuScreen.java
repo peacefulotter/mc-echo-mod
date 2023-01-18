@@ -1,17 +1,16 @@
 package com.peacefulotter.echomod.gui;
 
 import com.peacefulotter.echomod.config.Config;
+import com.peacefulotter.echomod.config.ConfigManager;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.option.SimpleOption;
 import net.minecraft.text.Text;
 
-import java.util.function.Consumer;
-
-import static com.peacefulotter.echomod.config.ConfigManager.AUTO_FISH_ACTIVE;
-import static com.peacefulotter.echomod.config.ConfigManager.AUTO_LIBRARIAN_ACTIVE;
+import java.awt.*;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class EchoMenuScreen extends Screen
 {
@@ -19,7 +18,7 @@ public class EchoMenuScreen extends Screen
     private static final int BUTTON_WIDTH = 100;
     private static final int BUTTON_HEIGHT = 20;
     private static final int OFFSET_ANCHOR_Y = 5;
-    private static final int OFFSET_X = 10;
+    private static int OFFSET_ANCHOR_X = 10;
 
     private final Screen parent;
     private final MinecraftClient client;
@@ -34,39 +33,46 @@ public class EchoMenuScreen extends Screen
         this.anchorY = 10;
     }
 
-    private void addBtn( String name, ButtonWidget.PressAction onPress )
+    private ColoredButton addBtn( String name, ButtonWidget.PressAction onPress )
     {
-        addDrawableChild(
-                new ColoredButton.Builder( name, onPress )
-                    .size( BUTTON_WIDTH, BUTTON_HEIGHT )
-                    .position( OFFSET_X, anchorY )
-                    .build()
-        );
+        ColoredButton widget = new ColoredButton.Builder( name, onPress )
+            .size( BUTTON_WIDTH, BUTTON_HEIGHT )
+            .position( OFFSET_ANCHOR_X, anchorY )
+            .build();
+
+        addDrawableChild( widget );
 
         anchorY += BUTTON_HEIGHT + OFFSET_ANCHOR_Y;
+        return widget;
     }
 
-    private ClickableWidget getSlider( String key, int from, int to, int cur, Consumer<Integer> onChange)
+    private double map(double cur, double from, double to)
     {
-        /*
-        new SimpleOption.ValidatingIntSliderCallbacks(from, to)
-                        .withModifier(
-                                (value) -> value * 10,
-                                (value) -> value / 10
-                        ),
-                Codec.intRange(10, 500)
-         */
-        SimpleOption<Integer> option = new SimpleOption<>(key,
+        return cur * (to - from) + from;
+    }
+
+    private double mapAndRound( double v, double from, double to )
+    {
+        BigDecimal bd = BigDecimal.valueOf( map(v, from, to) );
+        bd = bd.setScale(3, RoundingMode.HALF_UP);
+        return bd.doubleValue();
+    }
+
+    private void addSlider( SliderParams p )
+    {
+        double from = p.from();
+        double to = p.to();
+        SimpleOption<Double> option = new SimpleOption<>(p.key(),
             SimpleOption.emptyTooltip(),
-            (opt, value) -> Text.of(key + ": " + value ),
-            new SimpleOption.ValidatingIntSliderCallbacks(from, to),
-            cur, onChange
+            (opt, value) -> Text.of(p.key() + ": " + mapAndRound(value, from, to) ),
+            SimpleOption.DoubleSliderCallbacks.INSTANCE,
+            p.cur(), v -> p.onChange().accept(map(v, from, to))
         );
 
-        return option.createButton(
+        addDrawableChild( option.createButton(
             MinecraftClient.getInstance().options,
-            OFFSET_X * 2 + BUTTON_WIDTH, anchorY, BUTTON_WIDTH
-        );
+            OFFSET_ANCHOR_X * 2 + BUTTON_WIDTH, anchorY, BUTTON_WIDTH
+        ) );
     }
 
     private void addConfig( Config config )
@@ -74,11 +80,14 @@ public class EchoMenuScreen extends Screen
         addDrawableChild(
             new ConfigButton.Builder( config )
                 .size( BUTTON_WIDTH, BUTTON_HEIGHT )
-                .position( OFFSET_X, anchorY )
+                .position( OFFSET_ANCHOR_X, anchorY )
                 .build()
         );
 
-        addDrawableChild( getSlider( config.getName(), 0, 10, 4, (v) -> {} ) );
+        config.getWidgetParams().forEach( p -> {
+            addSlider(p);
+            anchorY += BUTTON_HEIGHT + OFFSET_ANCHOR_Y;
+        } );
 
         anchorY += BUTTON_HEIGHT + OFFSET_ANCHOR_Y;
     }
@@ -86,9 +95,22 @@ public class EchoMenuScreen extends Screen
     @Override
     protected void init()
     {
-        addConfig( AUTO_FISH_ACTIVE );
-        addConfig( AUTO_LIBRARIAN_ACTIVE );
+        OFFSET_ANCHOR_X = 5;
+        for ( ConfigManager cm : ConfigManager.values() )
+            addConfig( cm.getConfig() );
         addBtn( "Return", btn -> close() );
+        addBtn( "Test 1", btn -> {} ).setBackgroundColor( Color.BLUE );
+        addBtn( "Test 2", btn -> {} ).setBackgroundColor( Color.MAGENTA );
+        addBtn( "Test 3", btn -> {} ).setBackgroundColor( Color.CYAN );
+        addBtn( "Test 4", btn -> {} ).setBackgroundColor( Color.GRAY );
+        addBtn( "Test 5", btn -> {} ).setBackgroundColor( Color.GREEN );
+        OFFSET_ANCHOR_X = 300;
+        anchorY = OFFSET_ANCHOR_Y;
+        addBtn( "Test 6", btn -> {} ).setBackgroundColor( Color.LIGHT_GRAY );
+        addBtn( "Test 7", btn -> {} ).setBackgroundColor( Color.ORANGE );
+        addBtn( "Test 8", btn -> {} ).setBackgroundColor( Color.PINK );
+        addBtn( "Test 9", btn -> {} ).setBackgroundColor( Color.magenta );
+        addBtn( "Test 11", btn -> {} ).setBackgroundColor( Color.RED );
     }
 
     public void close() {

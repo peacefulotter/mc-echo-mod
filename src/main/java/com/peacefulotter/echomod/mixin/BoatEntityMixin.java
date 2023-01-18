@@ -5,7 +5,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -15,12 +14,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
+import static com.peacefulotter.echomod.config.BoatFlyHackConfig.YAW_VELOCITY;
+
 
 @Mixin( BoatEntity.class )
 public abstract class BoatEntityMixin extends Entity
 {
-    private static final float YAW_VELOCITY = 4;
-
     @Shadow private float velocityDecay;
     @Shadow private float yawVelocity;
 

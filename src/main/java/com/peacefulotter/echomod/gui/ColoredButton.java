@@ -34,7 +34,7 @@ public class ColoredButton extends ButtonWidget
         TextRenderer textRenderer = minecraftClient.textRenderer;
         RenderSystem.setShader( GameRenderer::getPositionTexProgram);
         RenderSystem.setShaderTexture(0, WIDGETS_TEXTURE);
-        RenderSystem.setShaderColor(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue(), this.alpha);
+        RenderSystem.setShaderColor(backgroundColor.getRed() / 255f, backgroundColor.getGreen() / 255f, backgroundColor.getBlue() / 255f, this.alpha);
         int i = this.getYImage(this.isHovered());
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();

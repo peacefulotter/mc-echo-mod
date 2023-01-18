@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static com.peacefulotter.echomod.EchoModClient.CLIENT_LOGGER;
-import static com.peacefulotter.echomod.config.ConfigManager.AUTO_FISH_ACTIVE;
+import static com.peacefulotter.echomod.config.ConfigManager.AUTO_FISH;
 
 
 @Mixin( FishingBobberEntity.class)
@@ -22,8 +22,8 @@ public class PlayerFishMixin
     @Inject(at=@At("RETURN"), method="onTrackedDataSet")
     public void onTrackedDataSet( TrackedData<?> data, CallbackInfo ci )
     {
-        CLIENT_LOGGER.info( "AutoFish active: " + AUTO_FISH_ACTIVE.get() + ", caught?: " + this.caughtFish + ", data: " + data );
-        if ( !AUTO_FISH_ACTIVE.get() ) return;
+        CLIENT_LOGGER.info( "AutoFish active: " + AUTO_FISH.getActive() + ", caught?: " + this.caughtFish + ", data: " + data );
+        if ( !AUTO_FISH.getActive() ) return;
 
         if ( this.caughtFish )
         {

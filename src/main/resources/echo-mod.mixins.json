@@ -7,7 +7,7 @@
     "BoatEntityMixin"
   ],
   "client": [
-    "FlyHackMixin",
+    "BoatFlyHackMixin",
     "MenuBtnAccess",
     "PlayerConnectionInvoker",
     "PlayerFishMixin"

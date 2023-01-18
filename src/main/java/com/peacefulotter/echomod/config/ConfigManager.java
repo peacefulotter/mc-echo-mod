@@ -1,7 +1,18 @@
 package com.peacefulotter.echomod.config;
 
-public class ConfigManager
+public enum ConfigManager
 {
-    public static Config AUTO_FISH_ACTIVE = new Config("AutoFish", true);
-    public static Config AUTO_LIBRARIAN_ACTIVE = new Config("AutoLibrarian" );
+    BOAT_FLY_HACK( new BoatFlyHackConfig() ),
+    AUTO_FISH( new Config( "AutoFish", true ) ),
+    AUTO_LIBRARIAN( new Config( "AutoLibrarian", false ) );
+
+    private final Config config;
+
+    ConfigManager( Config config )
+    {
+        this.config = config;
+    }
+
+    public boolean getActive() { return config.get(); }
+    public Config getConfig() { return config; }
 }
