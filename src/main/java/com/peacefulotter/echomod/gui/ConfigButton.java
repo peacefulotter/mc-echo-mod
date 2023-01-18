@@ -8,7 +8,11 @@ public class ConfigButton extends ColoredButton
 {
     public ConfigButton( Config config, int x, int y, int width, int height, Text message, PressAction onPress, NarrationSupplier narrationSupplier )
     {
-        super( Config.DEFAULT_TEXT_COLOR, Config.DEFAULT_BGRD_COLOR, x, y, width, height, message, onPress, narrationSupplier );
+        super(
+            config.get() ? Config.ACTIVE_TEXT_COLOR : Config.DEFAULT_TEXT_COLOR,
+            config.get() ? Config.ACTIVE_BGRD_COLOR : Config.DEFAULT_BGRD_COLOR,
+            x, y, width, height, message, onPress, narrationSupplier
+        );
         config.onChange( v -> {
             if ( v )
             {

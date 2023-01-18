@@ -86,14 +86,16 @@ public class ColoredButton extends ButtonWidget
             return this;
         }
 
-        public void setTextColor( Color textColor )
+        public Builder setTextColor( Color textColor )
         {
             this.textColor = textColor;
+            return this;
         }
 
-        public void setBackgroundColor( Color backgroundColor )
+        public Builder setBackgroundColor( Color backgroundColor )
         {
             this.backgroundColor = backgroundColor;
+            return this;
         }
 
         public ColoredButton build() {
