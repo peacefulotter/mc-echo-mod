@@ -1,13 +1,10 @@
 package com.peacefulotter.echomod.mixin;
 
-import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.vehicle.BoatEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -19,10 +16,6 @@ public abstract class BoatEntityMixin extends Entity
 {
     @Shadow private float velocityDecay;
     @Shadow private float yawVelocity;
-
-    @Shadow private boolean pressingLeft;
-
-    @Shadow private boolean pressingRight;
 
     public BoatEntityMixin( EntityType<?> type, World world )
     {
@@ -44,15 +37,5 @@ public abstract class BoatEntityMixin extends Entity
     private void updatePaddles( CallbackInfo ci )
     {
         this.yawVelocity = 0f;
-//        if ( this.pressingLeft ) this.yawVelocity -= YAW_VELOCITY;
-//        if ( this.pressingRight ) this.yawVelocity += YAW_VELOCITY;
     }
-
-//    @Overwrite
-//    public void fall( double heightDifference, boolean onGround, BlockState state, BlockPos landedPosition )
-//    {
-//        // CLIENT_LOGGER.info( heightDifference + " " + onGround + " " + state + " " + landedPosition );
-//    }
-
-
 }

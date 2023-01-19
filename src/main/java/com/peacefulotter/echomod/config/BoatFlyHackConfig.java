@@ -9,26 +9,46 @@ public class BoatFlyHackConfig extends Config
     private static final String name = "BoatFlyHack";
     private static final boolean active = true;
 
-    public static double YAW_VELOCITY = 8d;
-    public static double FLY_UP = 0.419999f;
-    public static int MAX_FLY_TICKS = 39;
+    private double maxVel = 1;
+    private double flyUp = 0.419999f;
+    private int maxFlyTicks = 39;
 
     BoatFlyHackConfig()
     {
         super( name, active );
-        this.widgetParams.addAll( List.of(
+    }
+
+    @Override
+    public List<SliderParams> getWidgetParams()
+    {
+        return List.of(
             new SliderParams(
-                "yaw_vel", 4d, 16d, YAW_VELOCITY,
-                (v) -> BoatFlyHackConfig.YAW_VELOCITY = v
+                "max_vel", 0.4, 2, maxVel,
+                (v) -> maxVel = v
             ),
             new SliderParams(
-                "fly_up", 0.2, 0.7, FLY_UP,
-                (v) -> BoatFlyHackConfig.FLY_UP = v
+                "fly_up", 0.1, 1, flyUp,
+                (v) -> flyUp = v
             ),
             new SliderParams(
-                "max_ticks", 20, 90, MAX_FLY_TICKS,
-                (v) -> BoatFlyHackConfig.MAX_FLY_TICKS = v.intValue()
+                "max_ticks", 40, 81, maxFlyTicks,
+                (v) -> maxFlyTicks = v.intValue()
             )
-        ) );
+        );
+    }
+
+    public double getMaxVel()
+    {
+        return maxVel;
+    }
+
+    public double getFlyUp()
+    {
+        return flyUp;
+    }
+
+    public int getMaxFlyTicks()
+    {
+        return maxFlyTicks;
     }
 }

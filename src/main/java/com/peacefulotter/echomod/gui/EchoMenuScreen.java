@@ -17,8 +17,9 @@ import java.math.RoundingMode;
 
 public class EchoMenuScreen extends Screen
 {
-    private static final int GRADIENT_START_COLOR = getRGBA( 0, 255, 0, 100 );
-    private static final int GRADIENT_STOP_COLOR = getRGBA( 255, 0, 255, 100 );
+    private static final int GRADIENT_START_COLOR = getRGBA( 150, 150, 0, 100 );
+    private static final int GRADIENT_MIDDLE_COLOR = getRGBA( 0, 150, 150, 100 );
+    private static final int GRADIENT_STOP_COLOR = getRGBA( 150, 0, 150, 100 );
 
     private static final Text TITLE = Text.literal( "menu@echo-mod" );
     private static final int BUTTON_WIDTH = 100;
@@ -86,7 +87,7 @@ public class EchoMenuScreen extends Screen
 
     private double invMapAndRound( double v, double from, double to )
     {
-        BigDecimal bd = BigDecimal.valueOf( map(v, from, to) );
+        BigDecimal bd = BigDecimal.valueOf( invMap(v, from, to) );
         bd = bd.setScale(3, RoundingMode.HALF_UP);
         return bd.doubleValue();
     }
@@ -182,7 +183,8 @@ public class EchoMenuScreen extends Screen
     @Override
     public void render( MatrixStack matrices, int mouseX, int mouseY, float delta )
     {
-        this.fillGradient(matrices, 0, 0, this.width, this.height, GRADIENT_START_COLOR, GRADIENT_STOP_COLOR);
+        this.fillGradient(matrices, 0, 0, this.width, this.height / 2, GRADIENT_START_COLOR, GRADIENT_MIDDLE_COLOR);
+        this.fillGradient(matrices, 0, this.height / 2, this.width, this.height, GRADIENT_MIDDLE_COLOR, GRADIENT_STOP_COLOR);
         super.render( matrices, mouseX, mouseY, delta );
     }
 

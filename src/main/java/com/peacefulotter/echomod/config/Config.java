@@ -4,6 +4,7 @@ import com.peacefulotter.echomod.gui.SliderParams;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Config
@@ -17,14 +18,11 @@ public class Config
     private final String name;
     private boolean active;
 
-    protected final List<SliderParams> widgetParams;
-
     Config(String name, boolean active)
     {
         this.name = name;
         this.active = active;
         this.listeners = new ArrayList<>();
-        this.widgetParams = new ArrayList<>();
     }
 
     public void onChange( ConfigChangeCallback cb )
@@ -39,6 +37,6 @@ public class Config
 
     public boolean get() { return active; }
     public String getName() { return name; }
-    public List<SliderParams> getWidgetParams() { return widgetParams; }
+    public List<SliderParams> getWidgetParams() { return Collections.emptyList(); }
 }
 

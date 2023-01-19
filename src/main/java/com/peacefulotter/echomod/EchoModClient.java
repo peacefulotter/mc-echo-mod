@@ -2,6 +2,8 @@ package com.peacefulotter.echomod;
 
 import com.peacefulotter.echomod.commands.CommandHandler;
 import net.fabricmc.api.ClientModInitializer;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,5 +21,10 @@ public class EchoModClient implements ClientModInitializer
         CommandHandler.register( "foo", ctx ->
             ctx.getSource().sendFeedback( Text.literal( "foo command" ) )
         );
+    }
+
+    public static ClientPlayerEntity getPlayer()
+    {
+        return MinecraftClient.getInstance().player;
     }
 }

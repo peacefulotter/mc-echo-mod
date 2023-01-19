@@ -1,6 +1,9 @@
 package com.peacefulotter.echomod.mixin;
 
-import net.minecraft.client.MinecraftClient;
+import com.peacefulotter.echomod.EchoModClient;
+import com.peacefulotter.echomod.config.BoatFlyHackConfig;
+import com.peacefulotter.echomod.config.Config;
+import com.peacefulotter.echomod.config.ConfigManager;
 import net.minecraft.client.input.Input;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -19,20 +22,19 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import static com.peacefulotter.echomod.config.BoatFlyHackConfig.FLY_UP;
-import static com.peacefulotter.echomod.config.BoatFlyHackConfig.MAX_FLY_TICKS;
 import static com.peacefulotter.echomod.config.ConfigManager.BOAT_FLY_HACK;
 
 @Mixin( ClientPlayerEntity.class )
 public abstract class BoatFlyHackMixin extends Entity
 {
-
+    private static final double ANTI_KICK_Y = -0.03125D;
 
     @Shadow public Input input;
     @Shadow @Final public ClientPlayNetworkHandler networkHandler;
 
     @Shadow public abstract float getPitch( float tickDelta );
 
+    private final BoatFlyHackConfig config;
     private Entity mount;
     private boolean mounted = false;
     private int tick = 0;
@@ -40,6 +42,7 @@ public abstract class BoatFlyHackMixin extends Entity
     public BoatFlyHackMixin( EntityType<?> type, World world )
     {
         super( type, world );
+        this.config = (BoatFlyHackConfig) BOAT_FLY_HACK.getConfig();
     }
 
     @Inject(at=@At("RETURN"), method="startRiding" )
@@ -48,6 +51,7 @@ public abstract class BoatFlyHackMixin extends Entity
         if ( !BOAT_FLY_HACK.getActive() || !cir.getReturnValue() || !(entity instanceof BoatEntity) ) return; // accepted to mount?
         mounted = true;
         mount = entity;
+        tick = 0;
     }
 
     @Inject(at=@At( "RETURN" ), method="dismountVehicle")
@@ -61,28 +65,42 @@ public abstract class BoatFlyHackMixin extends Entity
     {
         if ( !BOAT_FLY_HACK.getActive() || !mounted ) return;
 
-        double y = 0;
+        // double y = 0;
 
-        if ( tick >= MAX_FLY_TICKS )
+        if ( tick >= config.getMaxFlyTicks() )
         {
-            y = -FLY_UP;
+            // y = -FLY_UP;
             tick = 0;
+            mount.setPosition( mount.getPos().subtract( 0, ANTI_KICK_Y, 0 ) );
+            this.networkHandler.sendPacket( new VehicleMoveC2SPacket( mount ) );
+//            PlayerConnectionInvoker handler = (PlayerConnectionInvoker) EchoModClient.getPlayer().networkHandler.getConnection();
+//            VehicleMoveC2SPacket packet = new VehicleMoveC2SPacket( mount );
+//            handler.sendImm( packet, null );
         }
         else if ( tick == 1 )
-            y = FLY_UP;
-
-        Vec3d vel = mount.getVelocity();
-        mount.setVelocity( vel.getX(), y, vel.getZ() );
+        {
+            mount.setPosition( mount.getPos().add( 0, ANTI_KICK_Y, 0 ) );
+            this.networkHandler.sendPacket( new VehicleMoveC2SPacket( mount ) );
+        }
+//            y = FLY_UP;
+//
+//        Vec3d vel = mount.getVelocity();
+//        mount.setVelocity( vel.getX(), y, vel.getZ() );
         tick++;
     }
 
-    private int getPlayerElevation()
+    private boolean preventGroundMove()
     {
-        ClientPlayerEntity player = MinecraftClient.getInstance().player;
+        ClientPlayerEntity player = EchoModClient.getPlayer();
         BlockPos pos = player.getBlockPos();
         int elevation = 0;
         while ( player.world.getBlockState( pos.add( 0, -(elevation++), 0 ) ).isAir() ) {}
-        return elevation;
+
+        double y = pos.getY();
+        double decimalsY = (y - (int)y);
+
+        double GROUND_Y_THRESHOLD = 0.1;
+        return elevation <= 1 && decimalsY < GROUND_Y_THRESHOLD;
     }
 
     @Inject(at=@At( "RETURN" ), method="tickMovement")
@@ -95,18 +113,17 @@ public abstract class BoatFlyHackMixin extends Entity
         // PlayerMoveC2SPacket packet = new PlayerMoveC2SPacket.PositionAndOnGround( vec.x, vec.y, vec.z, false );
         // conn.sendImm( packet, null );
 
-        int elevation = getPlayerElevation();
-
         Vec3d rot = this.getRotationVector();
-        double y = Math.min(1, (rot.getY() + (this.input.jumping ? 0.5 : 0))) * FLY_UP;
-        if ( elevation == 1 )
+        double y = Math.min(1, (rot.getY() + (this.input.jumping ? 0.5 : 0))) * config.getFlyUp();
+        if ( preventGroundMove() )
             y = Math.max( 0, y );
         if ( !this.input.pressingForward && !this.input.jumping )
             y = 0;
-        y += mount.getY();
 
-        double x = mount.getX();
-        double z = mount.getZ();
+        double x = 0;
+        double z = 0;
+        mount.setVelocity( 0, 0, 0 );
+
         if ( this.input.pressingForward )
         {
             x += rot.getX();
@@ -125,8 +142,12 @@ public abstract class BoatFlyHackMixin extends Entity
             z += rightRot.getZ();
         }
 
-        mount.updatePosition( x, y, z );
-        mount.setYaw( getYaw() % 360.0F );
+        double len = new Vec3d( x, y, z ).length();
+        if ( len == 0 ) return;
+
+        Vec3d finalVel = new Vec3d( x, y, z ).multiply( config.getMaxVel() / len );
+        mount.setVelocity( finalVel );
+        mount.setYaw( getYaw() );
         this.networkHandler.sendPacket( new VehicleMoveC2SPacket( mount ) );
     }
 
