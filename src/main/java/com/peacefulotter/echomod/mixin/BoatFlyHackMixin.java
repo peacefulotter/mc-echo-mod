@@ -129,6 +129,11 @@ public abstract class BoatFlyHackMixin extends Entity
             x += rot.getX();
             z += rot.getZ();
         }
+        if ( this.input.pressingBack )
+        {
+            x -= rot.getX();
+            z -= rot.getZ();
+        }
         if ( this.input.pressingLeft )
         {
             Vec3d leftRot = rot.rotateY( (float) Math.PI / 2f );
