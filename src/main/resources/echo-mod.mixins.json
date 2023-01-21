@@ -4,13 +4,14 @@
   "package": "com.peacefulotter.echomod.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "AutoLibrarian",
     "BoatEntityMixin"
   ],
   "client": [
-    "api.PlayerConnectionInvoker",
     "BoatFlyHackMixin",
     "MenuBtnAccess",
-    "PlayerFishMixin"
+    "PlayerFishMixin",
+    "api.PlayerConnectionInvoker"
   ],
   "injectors": {
     "defaultRequire": 1
