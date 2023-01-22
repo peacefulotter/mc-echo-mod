@@ -2,8 +2,6 @@ package com.peacefulotter.echomod.mixin;
 
 import com.peacefulotter.echomod.EchoModClient;
 import com.peacefulotter.echomod.config.BoatFlyHackConfig;
-import com.peacefulotter.echomod.config.Config;
-import com.peacefulotter.echomod.config.ConfigManager;
 import net.minecraft.client.input.Input;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -27,14 +25,14 @@ import static com.peacefulotter.echomod.config.ConfigManager.BOAT_FLY_HACK;
 @Mixin( ClientPlayerEntity.class )
 public abstract class BoatFlyHackMixin extends Entity
 {
-    private static final double ANTI_KICK_Y = -0.03125D;
+    private static final double ANTI_KICK_Y = -0.031251D;
 
     @Shadow public Input input;
     @Shadow @Final public ClientPlayNetworkHandler networkHandler;
 
     @Shadow public abstract float getPitch( float tickDelta );
 
-    private final BoatFlyHackConfig config;
+    private BoatFlyHackConfig config;
     private Entity mount;
     private boolean mounted = false;
     private int tick = 0;
@@ -42,13 +40,13 @@ public abstract class BoatFlyHackMixin extends Entity
     public BoatFlyHackMixin( EntityType<?> type, World world )
     {
         super( type, world );
-        this.config = (BoatFlyHackConfig) BOAT_FLY_HACK.getConfig();
     }
 
     @Inject(at=@At("RETURN"), method="startRiding" )
     private void onStartRiding( Entity entity, boolean force, CallbackInfoReturnable<Boolean> cir )
     {
         if ( !BOAT_FLY_HACK.getActive() || !cir.getReturnValue() || !(entity instanceof BoatEntity) ) return; // accepted to mount?
+        config = (BoatFlyHackConfig) BOAT_FLY_HACK.getConfig();
         mounted = true;
         mount = entity;
         tick = 0;
@@ -60,32 +58,27 @@ public abstract class BoatFlyHackMixin extends Entity
         mounted = false;
     }
 
+    private void  sendMovePacket( int sign )
+    {
+        mount.setPosition( mount.getPos().add( 0, ANTI_KICK_Y * sign, 0 ) );
+        this.networkHandler.sendPacket( new VehicleMoveC2SPacket( mount ) );
+    }
+
     @Inject(at=@At( "RETURN" ), method="tick")
     private void onTick( CallbackInfo ci )
     {
         if ( !BOAT_FLY_HACK.getActive() || !mounted ) return;
 
-        // double y = 0;
-
         if ( tick >= config.getMaxFlyTicks() )
         {
-            // y = -FLY_UP;
             tick = 0;
-            mount.setPosition( mount.getPos().subtract( 0, ANTI_KICK_Y, 0 ) );
-            this.networkHandler.sendPacket( new VehicleMoveC2SPacket( mount ) );
-//            PlayerConnectionInvoker handler = (PlayerConnectionInvoker) EchoModClient.getPlayer().networkHandler.getConnection();
-//            VehicleMoveC2SPacket packet = new VehicleMoveC2SPacket( mount );
-//            handler.sendImm( packet, null );
+            sendMovePacket( -1 );
         }
         else if ( tick == 1 )
         {
-            mount.setPosition( mount.getPos().add( 0, ANTI_KICK_Y, 0 ) );
-            this.networkHandler.sendPacket( new VehicleMoveC2SPacket( mount ) );
+            sendMovePacket( 1 );
         }
-//            y = FLY_UP;
-//
-//        Vec3d vel = mount.getVelocity();
-//        mount.setVelocity( vel.getX(), y, vel.getZ() );
+
         tick++;
     }
 

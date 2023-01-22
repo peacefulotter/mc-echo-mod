@@ -7,10 +7,11 @@
     "BoatEntityMixin"
   ],
   "client": [
-    "api.PlayerConnectionInvoker",
     "BoatFlyHackMixin",
-    "MenuBtnAccess",
-    "PlayerFishMixin"
+    "GameModMenuBtn",
+    "PlayerFishMixin",
+    "TitleModMenuBtn",
+    "api.PlayerConnectionInvoker"
   ],
   "injectors": {
     "defaultRequire": 1

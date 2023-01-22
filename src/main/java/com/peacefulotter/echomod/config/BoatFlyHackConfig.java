@@ -23,7 +23,7 @@ public class BoatFlyHackConfig extends Config
     {
         return List.of(
             new SliderParams(
-                "max_vel", 0.4, 2, maxVel,
+                "max_vel", 0.2, 3, maxVel,
                 (v) -> maxVel = v
             ),
             new SliderParams(
@@ -31,7 +31,7 @@ public class BoatFlyHackConfig extends Config
                 (v) -> flyUp = v
             ),
             new SliderParams(
-                "max_ticks", 40, 81, maxFlyTicks,
+                "max_ticks", 20, 80, maxFlyTicks,
                 (v) -> maxFlyTicks = v.intValue()
             )
         );

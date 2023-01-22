@@ -17,9 +17,9 @@ import java.math.RoundingMode;
 
 public class EchoMenuScreen extends Screen
 {
-    private static final int GRADIENT_START_COLOR = getRGBA( 150, 150, 0, 100 );
-    private static final int GRADIENT_MIDDLE_COLOR = getRGBA( 0, 150, 150, 100 );
-    private static final int GRADIENT_STOP_COLOR = getRGBA( 150, 0, 150, 100 );
+    private static final int GRADIENT_START_COLOR = getRGBA( MenuColors.PRUSSIAN_BLUE );
+    private static final int GRADIENT_MIDDLE_COLOR = getRGBA( MenuColors.OXFORD_BLUE );
+    private static final int GRADIENT_STOP_COLOR = getRGBA( MenuColors.BLACK_FOGRA );
 
     private static final Text TITLE = Text.literal( "menu@echo-mod" );
     private static final int BUTTON_WIDTH = 100;
@@ -35,12 +35,13 @@ public class EchoMenuScreen extends Screen
     private GridWidget configGrid;
     private ColoredButton activeConfigBtn;
 
-    private static int getRGBA(int red, int green, int blue, int alpha)
+    private static int getRGBA(MenuColors mc)
     {
-        var r = red & 0xFF;
-        var g = green & 0xFF;
-        var b = blue & 0xFF;
-        var a = alpha & 0xFF;
+        Color c = mc.getColor();
+        var r = c.getRed() & 0xFF;
+        var g = c.getGreen() & 0xFF;
+        var b = c.getBlue() & 0xFF;
+        var a = c.getAlpha() & 0xFF;
         return (a << 24) + (r << 16) + (g << 8) + (b);
     }
 
@@ -113,8 +114,8 @@ public class EchoMenuScreen extends Screen
     {
         if ( activeConfigBtn != null )
         {
-            activeConfigBtn.setBackgroundColor( Color.GRAY );
-            activeConfigBtn.setTextColor( Color.WHITE );
+            activeConfigBtn.setBackgroundColor( MenuColors.BLACK_FOGRA.getColor() );
+            activeConfigBtn.setTextColor( MenuColors.PRUSSIAN_BLUE.getColor() );
         }
 
         remove( configGrid );
@@ -129,8 +130,8 @@ public class EchoMenuScreen extends Screen
         configGrid.getMainPositioner().margin( 0, 0, 0, OFFSET_Y );
         configGrid.setPos( getPosX( x ), getPosY( 0 ) );
         activeConfigBtn = (ColoredButton) btn;
-        activeConfigBtn.setBackgroundColor( Color.MAGENTA );
-        activeConfigBtn.setTextColor( Color.WHITE );
+        activeConfigBtn.setBackgroundColor( MenuColors.OXFORD_BLUE.getColor() );
+        activeConfigBtn.setTextColor( MenuColors.MIKADO_YELLOW.getColor() );
         configGrid.createAdder( 1 );
 
         int row = 0;
@@ -159,7 +160,7 @@ public class EchoMenuScreen extends Screen
             new ColoredButton.Builder( ">", (btn) -> openConfigMenu( btn, config, x + 2 ) )
                 .size( CONFIG_BUTTON_WIDTH, BUTTON_HEIGHT )
                 .position( getPosX( x + 1 ), getPosY( y ) )
-                .setBackgroundColor( Color.GRAY )
+                .setBackgroundColor( MenuColors.BLACK_FOGRA.getColor() )
                 .build()
         );
     }
