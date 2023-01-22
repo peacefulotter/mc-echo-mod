@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class EchoMod implements ModInitializer {
-	private static final String MOD_ID = "echo-mod";
+	public static final String MOD_ID = "echomod";
 	public static final Logger MOD_LOGGER = LoggerFactory.getLogger(MOD_ID);
 
 	@Override

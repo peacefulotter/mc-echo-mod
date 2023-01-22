@@ -11,9 +11,9 @@ import java.util.List;
 public class Config
 {
     public static final Color DEFAULT_TEXT_COLOR = MenuColors.VENETIAN_RED.getColor();
-    public static final Color DEFAULT_BGRD_COLOR = MenuColors.BLACK_FOGRA.getColor();
+    public static final Color DEFAULT_BGRD_COLOR = MenuColors.PRUSSIAN_BLUE.getColor();
     public static final Color ACTIVE_TEXT_COLOR = MenuColors.MALACHITE.getColor();
-    public static final Color ACTIVE_BGRD_COLOR = MenuColors.BLACK_FOGRA.getColor();
+    public static final Color ACTIVE_BGRD_COLOR = MenuColors.PRUSSIAN_BLUE.getColor();
 
     private final List<ConfigChangeCallback> listeners;
     private final String name;

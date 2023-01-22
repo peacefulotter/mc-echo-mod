@@ -1,7 +1,6 @@
 package com.peacefulotter.echomod.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.peacefulotter.echomod.config.Config;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -12,8 +11,6 @@ import net.minecraft.util.math.MathHelper;
 
 import java.awt.*;
 import java.util.function.Supplier;
-
-import static com.peacefulotter.echomod.EchoModClient.CLIENT_LOGGER;
 
 
 public class ColoredButton extends ButtonWidget

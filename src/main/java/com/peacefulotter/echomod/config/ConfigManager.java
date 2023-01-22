@@ -4,7 +4,7 @@ public enum ConfigManager
 {
     BOAT_FLY_HACK( new BoatFlyHackConfig() ),
     AUTO_FISH( new Config( "AutoFish", true ) ),
-    AUTO_LIBRARIAN( new Config( "AutoLibrarian", false ) );
+    AUTO_LIBRARIAN( new Config( "AutoLibrarian", true ) );
 
     private final Config config;
 

@@ -1,5 +1,7 @@
 package com.peacefulotter.echomod.gui;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.peacefulotter.echomod.EchoMod;
 import com.peacefulotter.echomod.config.Config;
 import com.peacefulotter.echomod.config.ConfigManager;
 import net.minecraft.client.MinecraftClient;
@@ -8,30 +10,38 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.gui.widget.GridWidget;
 import net.minecraft.client.option.SimpleOption;
+import net.minecraft.client.texture.NativeImage;
+import net.minecraft.client.texture.NativeImageBackedTexture;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.resource.ResourceManager;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 
 import java.awt.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class EchoMenuScreen extends Screen
+public class MenuScreen extends Screen
 {
     private static final int GRADIENT_START_COLOR = getRGBA( MenuColors.PRUSSIAN_BLUE );
-    private static final int GRADIENT_MIDDLE_COLOR = getRGBA( MenuColors.OXFORD_BLUE );
+    private static final int GRADIENT_MIDDLE_COLOR = getRGBA( MenuColors.DARK_GREEN );
     private static final int GRADIENT_STOP_COLOR = getRGBA( MenuColors.BLACK_FOGRA );
 
     private static final Text TITLE = Text.literal( "menu@echo-mod" );
+    private static final int BACKGROUND_MARGIN = 10;
     private static final int BUTTON_WIDTH = 100;
     private static final int CONFIG_BUTTON_WIDTH = 20;
     private static final int BUTTON_HEIGHT = 20;
-    private static final int ANCHOR_Y = 10;
-    private static final int ANCHOR_X = 10;
+    private static final int PADDING_Y = 10;
+    private static final int PADDING_X = 10;
     private static final int OFFSET_X = 5;
     private static final int OFFSET_Y = 5;
 
     private final Screen parent;
     private final MinecraftClient client;
+    private final Identifier imgLoc;
     private GridWidget configGrid;
     private ColoredButton activeConfigBtn;
 
@@ -45,7 +55,7 @@ public class EchoMenuScreen extends Screen
         return (a << 24) + (r << 16) + (g << 8) + (b);
     }
 
-    public EchoMenuScreen( Screen parent, MinecraftClient client )
+    public MenuScreen( Screen parent, MinecraftClient client )
     {
         super( TITLE );
         this.parent = parent;
@@ -53,17 +63,33 @@ public class EchoMenuScreen extends Screen
         this.configGrid = new GridWidget();
         addDrawableChild( configGrid );
 
+        this.imgLoc = new Identifier( EchoMod.MOD_ID, "textures/background.jpg" );
+        loadBackgroundTexture();
+    }
+
+    private void loadBackgroundTexture()
+    {
+        ResourceManager manager  = MinecraftClient.getInstance().getResourceManager();
+        try ( InputStream stream = manager.getResource( imgLoc ).get().getInputStream() )
+        {
+            NativeImage nativeImage = NativeImage.read(stream);
+            NativeImageBackedTexture nativeImageBackedTexture = new NativeImageBackedTexture(nativeImage);
+            this.client.getTextureManager().registerTexture(imgLoc, nativeImageBackedTexture);
+        } catch ( IOException e )
+        {
+            throw new RuntimeException( e );
+        }
     }
 
     private int getPosX( int x )
     {
-        return ANCHOR_X + OFFSET_X  * x + BUTTON_WIDTH * (x - 1) +
+        return BACKGROUND_MARGIN + PADDING_X + OFFSET_X  * x + BUTTON_WIDTH * (x - 1) +
             (x >= 2 ? CONFIG_BUTTON_WIDTH : BUTTON_WIDTH);
     }
 
     private int getPosY( int y )
     {
-        return ANCHOR_Y + (OFFSET_Y + BUTTON_HEIGHT) * y;
+        return BACKGROUND_MARGIN + PADDING_Y + (OFFSET_Y + BUTTON_HEIGHT) * y;
     }
 
     private ColoredButton addBtn( String name, ButtonWidget.PressAction onPress, int x, int y )
@@ -184,8 +210,14 @@ public class EchoMenuScreen extends Screen
     @Override
     public void render( MatrixStack matrices, int mouseX, int mouseY, float delta )
     {
-        this.fillGradient(matrices, 0, 0, this.width, this.height / 2, GRADIENT_START_COLOR, GRADIENT_MIDDLE_COLOR);
-        this.fillGradient(matrices, 0, this.height / 2, this.width, this.height, GRADIENT_MIDDLE_COLOR, GRADIENT_STOP_COLOR);
+        RenderSystem.enableBlend();
+        RenderSystem.setShaderTexture(0, this.imgLoc);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        // fillGradient(matrices, 0, 0, width, height / 2, GRADIENT_START_COLOR, GRADIENT_MIDDLE_COLOR);
+        // fillGradient(matrices, 0, height / 2, width, height, GRADIENT_MIDDLE_COLOR, GRADIENT_STOP_COLOR);
+        fill(matrices, 0, 0, width, height, GRADIENT_MIDDLE_COLOR);
+        int margin = BACKGROUND_MARGIN * 2;
+        drawTexture( matrices, BACKGROUND_MARGIN, BACKGROUND_MARGIN, 0f, 0f, width - margin, height - margin, width - margin, height - margin );
         super.render( matrices, mouseX, mouseY, delta );
     }
 

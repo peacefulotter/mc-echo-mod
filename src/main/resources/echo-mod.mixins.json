@@ -4,6 +4,7 @@
   "package": "com.peacefulotter.echomod.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "AutoLibrarian",
     "BoatEntityMixin"
   ],
   "client": [
@@ -11,6 +12,7 @@
     "GameModMenuBtn",
     "PlayerFishMixin",
     "TitleModMenuBtn",
+    "PlayerFishMixin",
     "api.PlayerConnectionInvoker"
   ],
   "injectors": {

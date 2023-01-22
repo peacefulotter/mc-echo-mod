@@ -1,6 +1,6 @@
 package com.peacefulotter.echomod.mixin;
 
-import com.peacefulotter.echomod.gui.ModMenuBtn;
+import com.peacefulotter.echomod.gui.MenuOpenBtn;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -22,7 +22,7 @@ public class TitleModMenuBtn extends Screen
     @Inject(at = @At("HEAD"), method = "initWidgetsNormal")
     private void addMenu( CallbackInfo ci )
     {
-        ButtonWidget btn = ModMenuBtn.getBtn( this, client );
+        ButtonWidget btn = MenuOpenBtn.getBtn( this, client );
         this.addDrawableChild( btn );
     }
 }

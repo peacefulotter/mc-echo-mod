@@ -21,6 +21,9 @@ public class EchoModClient implements ClientModInitializer
         CommandHandler.register( "foo", ctx ->
             ctx.getSource().sendFeedback( Text.literal( "foo command" ) )
         );
+
+        // implements HudRenderCallback
+        // HudRenderCallback.EVENT.register( new AutoLibrarianHud() );
     }
 
     public static ClientPlayerEntity getPlayer()

@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "id": "echo-mod",
+  "id": "echomod",
   "version": "${version}",
 
   "name": "EchoMod",
-  "description": "@peacefulotter mod",
+  "description": "echo@mod",
   "authors": [
     "peacefulotter"
   ],
@@ -14,7 +14,7 @@
   },
 
   "license": "CC0-1.0",
-  "icon": "assets/modid/icon.png",
+  "icon": "assets/echomod/icon.png",
 
   "environment": "*",
   "entrypoints": {
