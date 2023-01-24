@@ -1,4 +1,4 @@
-package com.peacefulotter.echomod.mixin;
+package com.peacefulotter.echomod.mixin.gui;
 
 import com.peacefulotter.echomod.gui.MenuOpenBtn;
 import net.minecraft.client.gui.screen.Screen;

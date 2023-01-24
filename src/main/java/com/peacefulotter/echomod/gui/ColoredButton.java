@@ -67,8 +67,8 @@ public class ColoredButton extends ButtonWidget
         public Builder( String text, PressAction onPress) {
             this.message = Text.of( text );
             this.onPress = onPress;
-            this.textColor = MenuColors.MIKADO_YELLOW.getColor();
-            this.backgroundColor = MenuColors.PRUSSIAN_BLUE.getColor();
+            this.textColor = MenuColors.MALACHITE.getColor();
+            this.backgroundColor = MenuColors.PURPLE.getColor();
         }
 
         public Builder position( int x, int y) {

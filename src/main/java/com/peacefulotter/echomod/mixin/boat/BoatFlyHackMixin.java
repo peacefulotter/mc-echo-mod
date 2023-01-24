@@ -1,4 +1,4 @@
-package com.peacefulotter.echomod.mixin;
+package com.peacefulotter.echomod.mixin.boat;
 
 import com.peacefulotter.echomod.EchoModClient;
 import com.peacefulotter.echomod.config.BoatFlyHackConfig;

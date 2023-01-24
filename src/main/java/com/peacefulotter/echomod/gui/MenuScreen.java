@@ -26,11 +26,11 @@ import java.math.RoundingMode;
 public class MenuScreen extends Screen
 {
     private static final int GRADIENT_START_COLOR = getRGBA( MenuColors.PRUSSIAN_BLUE );
-    private static final int GRADIENT_MIDDLE_COLOR = getRGBA( MenuColors.DARK_GREEN );
+    private static final int GRADIENT_MIDDLE_COLOR = getRGBA( MenuColors.PURPLE );
     private static final int GRADIENT_STOP_COLOR = getRGBA( MenuColors.BLACK_FOGRA );
 
     private static final Text TITLE = Text.literal( "menu@echo-mod" );
-    private static final int BACKGROUND_MARGIN = 10;
+    private static final int BACKGROUND_MARGIN = 5;
     private static final int BUTTON_WIDTH = 100;
     private static final int CONFIG_BUTTON_WIDTH = 20;
     private static final int BUTTON_HEIGHT = 20;

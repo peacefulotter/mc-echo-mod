@@ -6,16 +6,13 @@ import java.util.List;
 
 public class BoatFlyHackConfig extends Config
 {
-    private static final String name = "BoatFlyHack";
-    private static final boolean active = true;
-
     private double maxVel = 1;
     private double flyUp = 0.419999f;
     private int maxFlyTicks = 39;
 
     BoatFlyHackConfig()
     {
-        super( name, active );
+        super( "BoatFlyHack", true );
     }
 
     @Override

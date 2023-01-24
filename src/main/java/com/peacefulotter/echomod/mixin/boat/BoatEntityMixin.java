@@ -1,4 +1,4 @@
-package com.peacefulotter.echomod.mixin;
+package com.peacefulotter.echomod.mixin.boat;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -10,6 +10,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+
+import static com.peacefulotter.echomod.config.ConfigManager.BOAT_FLY_HACK;
 
 @Mixin( BoatEntity.class )
 public abstract class BoatEntityMixin extends Entity
@@ -29,6 +31,7 @@ public abstract class BoatEntityMixin extends Entity
     )
     private void updateVelocity( CallbackInfo ci, double d, double e )
     {
+        if ( !BOAT_FLY_HACK.getActive() ) return;
         this.velocityDecay = 0.95f;
         this.setVelocity(this.getVelocity().subtract( 0, e, 0 ));
     }
@@ -36,6 +39,7 @@ public abstract class BoatEntityMixin extends Entity
     @Inject( at=@At(value = "INVOKE", target = "Lnet/minecraft/entity/vehicle/BoatEntity;setYaw(F)V"), method="updatePaddles" )
     private void updatePaddles( CallbackInfo ci )
     {
+        if ( !BOAT_FLY_HACK.getActive() ) return;
         this.yawVelocity = 0f;
     }
 }
