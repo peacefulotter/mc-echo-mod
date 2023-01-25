@@ -4,20 +4,19 @@
   "package": "com.peacefulotter.echomod.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "boat.BoatEntityMixin",
-    "librarian.ClientPlayerEntityMixin",
-    "librarian.MerchantMixin"
+    "BoatEntityRendererMixin",
+    "ClientPlayerEntityMixin",
+    "boat.BoatEntityMixin"
   ],
   "client": [
+    "EntityRendererMixin",
+    "InteractionManagerMixin",
+    "NetworkHandlerMixin",
     "PlayerFishMixin",
     "XRayHack",
     "api.PlayerConnectionInvoker",
-    "boat.BoatFlyHackMixin",
     "gui.GameModMenuBtn",
-    "gui.TitleModMenuBtn",
-    "librarian.InteractionManagerMixin",
-    "librarian.NetworkHandlerMixin",
-    "librarian.SimpleMerchantMixin"
+    "gui.TitleModMenuBtn"
   ],
   "injectors": {
     "defaultRequire": 1

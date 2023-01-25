@@ -13,6 +13,9 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import static com.peacefulotter.echomod.config.ConfigManager.BOAT_FLY_HACK;
 
+// TODO: Change methods to work as events like the other mixins methods
+// ----: Problem is these methods are updating private float variables
+
 @Mixin( BoatEntity.class )
 public abstract class BoatEntityMixin extends Entity
 {
@@ -32,14 +35,14 @@ public abstract class BoatEntityMixin extends Entity
     private void updateVelocity( CallbackInfo ci, double d, double e )
     {
         if ( !BOAT_FLY_HACK.getActive() ) return;
-        this.velocityDecay = 0.95f;
-        this.setVelocity(this.getVelocity().subtract( 0, e, 0 ));
+        velocityDecay = 0.95f;
+        setVelocity(getVelocity().subtract( 0, e, 0 ));
     }
 
     @Inject( at=@At(value = "INVOKE", target = "Lnet/minecraft/entity/vehicle/BoatEntity;setYaw(F)V"), method="updatePaddles" )
     private void updatePaddles( CallbackInfo ci )
     {
         if ( !BOAT_FLY_HACK.getActive() ) return;
-        this.yawVelocity = 0f;
+        yawVelocity = 0f;
     }
 }
