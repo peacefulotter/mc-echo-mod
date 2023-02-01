@@ -17,11 +17,11 @@ public class ColoredButton extends ButtonWidget
 {
     private Color textColor, backgroundColor;
 
-    public ColoredButton( Color textColor, Color backgroundColor, int x, int y, int width, int height, Text message, PressAction onPress, NarrationSupplier narrationSupplier )
+    public ColoredButton( MenuColors textColor, MenuColors backgroundColor, int x, int y, int width, int height, Text message, PressAction onPress, NarrationSupplier narrationSupplier )
     {
         super( x, y, width, height, message, onPress, narrationSupplier );
-        this.textColor = textColor;
-        this.backgroundColor = backgroundColor;
+        this.textColor = textColor.getColor();
+        this.backgroundColor = backgroundColor.getColor();
     }
 
     @Override
@@ -43,14 +43,14 @@ public class ColoredButton extends ButtonWidget
         drawCenteredText(matrices, textRenderer, this.getMessage(), this.getX() + this.width / 2, this.getY() + (this.height - 8) / 2, color );
     }
 
-    public void setTextColor( Color textColor )
+    public void setTextColor( MenuColors textColor )
     {
-        this.textColor = textColor;
+        this.textColor = textColor.getColor();
     }
 
-    public void setBackgroundColor( Color backgroundColor )
+    public void setBackgroundColor( MenuColors backgroundColor )
     {
-        this.backgroundColor = backgroundColor;
+        this.backgroundColor = backgroundColor.getColor();
     }
 
     public static class Builder
@@ -62,13 +62,13 @@ public class ColoredButton extends ButtonWidget
         protected int y;
         protected int width = 150;
         protected int height = 20;
-        protected Color textColor, backgroundColor;
+        protected MenuColors textColor, backgroundColor;
 
         public Builder( String text, PressAction onPress) {
             this.message = Text.of( text );
             this.onPress = onPress;
-            this.textColor = MenuColors.MALACHITE.getColor();
-            this.backgroundColor = MenuColors.PURPLE.getColor();
+            this.textColor = MenuColors.WIDGET_TEXT;
+            this.backgroundColor = MenuColors.WIDGET_BACK;
         }
 
         public Builder position( int x, int y) {
@@ -83,13 +83,13 @@ public class ColoredButton extends ButtonWidget
             return this;
         }
 
-        public Builder setTextColor( Color textColor )
+        public Builder setTextColor( MenuColors textColor )
         {
             this.textColor = textColor;
             return this;
         }
 
-        public Builder setBackgroundColor( Color backgroundColor )
+        public Builder setBackgroundColor( MenuColors backgroundColor )
         {
             this.backgroundColor = backgroundColor;
             return this;

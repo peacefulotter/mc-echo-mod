@@ -23,6 +23,8 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+import static com.peacefulotter.echomod.EchoModClient.CLIENT_LOGGER;
+
 public class MenuScreen extends Screen
 {
     private static final int GRADIENT_START_COLOR = getRGBA( MenuColors.PRUSSIAN_BLUE );
@@ -44,6 +46,7 @@ public class MenuScreen extends Screen
     private final Identifier imgLoc;
     private GridWidget configGrid;
     private ColoredButton activeConfigBtn;
+    private int time;
 
     private static int getRGBA(MenuColors mc)
     {
@@ -61,6 +64,7 @@ public class MenuScreen extends Screen
         this.parent = parent;
         this.client = client;
         this.configGrid = new GridWidget();
+        this.time = 0;
         addDrawableChild( configGrid );
 
         this.imgLoc = new Identifier( EchoMod.MOD_ID, "textures/background.jpg" );
@@ -140,8 +144,8 @@ public class MenuScreen extends Screen
     {
         if ( activeConfigBtn != null )
         {
-            activeConfigBtn.setBackgroundColor( MenuColors.BLACK_FOGRA.getColor() );
-            activeConfigBtn.setTextColor( MenuColors.PRUSSIAN_BLUE.getColor() );
+            activeConfigBtn.setBackgroundColor( MenuColors.BLACK_FOGRA );
+            activeConfigBtn.setTextColor( MenuColors.PRUSSIAN_BLUE );
         }
 
         remove( configGrid );
@@ -156,8 +160,8 @@ public class MenuScreen extends Screen
         configGrid.getMainPositioner().margin( 0, 0, 0, OFFSET_Y );
         configGrid.setPos( getPosX( x ), getPosY( 0 ) );
         activeConfigBtn = (ColoredButton) btn;
-        activeConfigBtn.setBackgroundColor( MenuColors.OXFORD_BLUE.getColor() );
-        activeConfigBtn.setTextColor( MenuColors.MIKADO_YELLOW.getColor() );
+        activeConfigBtn.setBackgroundColor( MenuColors.WIDGET_BACK );
+        activeConfigBtn.setTextColor( MenuColors.MIKADO_YELLOW );
         configGrid.createAdder( 1 );
 
         int row = 0;
@@ -186,7 +190,7 @@ public class MenuScreen extends Screen
             new ColoredButton.Builder( ">", (btn) -> openConfigMenu( btn, config, x + 2 ) )
                 .size( CONFIG_BUTTON_WIDTH, BUTTON_HEIGHT )
                 .position( getPosX( x + 1 ), getPosY( y ) )
-                .setBackgroundColor( MenuColors.BLACK_FOGRA.getColor() )
+                .setBackgroundColor( MenuColors.BLACK_FOGRA )
                 .build()
         );
     }
@@ -198,13 +202,17 @@ public class MenuScreen extends Screen
         int y = 0;
         for ( ConfigManager cm : ConfigManager.values() )
             addConfig( cm.getConfig(), x, y++ );
-
         addBtn( "Return", btn -> close(), x, 8 );
-        addBtn( "Test 3", btn -> {}, 3, 0 ).setBackgroundColor( Color.CYAN );
-        addBtn( "Test 4", btn -> {}, 3, 1 ).setBackgroundColor( Color.GRAY );
-        addBtn( "Test 5", btn -> {}, 3, 2 ).setBackgroundColor( Color.GREEN );
-        addBtn( "Test 9", btn -> {}, 3, 3 ).setBackgroundColor( Color.magenta );
-        addBtn( "Test 0", btn -> {}, 3, 4 ).setBackgroundColor( Color.RED );
+
+        addBtn( "Test", btn -> close(), 3, 0 ).setBackgroundColor( MenuColors.CORNFLOWER_BLUE );
+        addBtn( "Test", btn -> close(), 3, 1 ).setBackgroundColor( MenuColors.AMARANTH_PURPLE );
+        addBtn( "Test", btn -> close(), 3, 2 ).setBackgroundColor( MenuColors.PEACH );
+        addBtn( "Test", btn -> close(), 3, 3 ).setBackgroundColor( MenuColors.GREEN_PANTONE );
+        addBtn( "Test", btn -> close(), 3, 4 ).setBackgroundColor( MenuColors.SEA_GREEN_CRAYOLA );
+        addBtn( "Test", btn -> close(), 3, 5 ).setBackgroundColor( MenuColors.MOUTAIN_MEADOW );
+        addBtn( "Test", btn -> close(), 3, 6 ).setBackgroundColor( MenuColors.DARK_GREEN );
+        addBtn( "Test", btn -> close(), 3, 7 ).setBackgroundColor( MenuColors.RED_CRAYOLA );
+        addBtn( "Test", btn -> close(), 3, 8 ).setBackgroundColor( MenuColors.ARMY_GREEN );
     }
 
     @Override
@@ -213,9 +221,16 @@ public class MenuScreen extends Screen
         RenderSystem.enableBlend();
         RenderSystem.setShaderTexture(0, this.imgLoc);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+
         // fillGradient(matrices, 0, 0, width, height / 2, GRADIENT_START_COLOR, GRADIENT_MIDDLE_COLOR);
         // fillGradient(matrices, 0, height / 2, width, height, GRADIENT_MIDDLE_COLOR, GRADIENT_STOP_COLOR);
-        fill(matrices, 0, 0, width, height, GRADIENT_MIDDLE_COLOR);
+
+        // Background
+        Color color = Color.getHSBColor( time / 360f, 1, 1 );
+        time = (time + 1) % 360;
+        fill(matrices, 0, 0, width, height, color.getRGB());
+
+        // Image
         int margin = BACKGROUND_MARGIN * 2;
         drawTexture( matrices, BACKGROUND_MARGIN, BACKGROUND_MARGIN, 0f, 0f, width - margin, height - margin, width - margin, height - margin );
         super.render( matrices, mouseX, mouseY, delta );

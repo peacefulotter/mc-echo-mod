@@ -12,9 +12,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 
 @Mixin( GameMenuScreen.class )
-public class GameModMenuBtn extends Screen
+public class GameMenuScreenMixin extends Screen
 {
-    protected GameModMenuBtn( Text title )
+    protected GameMenuScreenMixin( Text title )
     {
         super( title );
     }

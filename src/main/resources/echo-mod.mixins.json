@@ -15,8 +15,9 @@
     "PlayerFishMixin",
     "XRayHack",
     "api.PlayerConnectionInvoker",
-    "gui.GameModMenuBtn",
-    "gui.TitleModMenuBtn"
+    "gui.GameMenuScreenMixin",
+    "gui.SliderWidgetMixin",
+    "gui.TitleScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1
